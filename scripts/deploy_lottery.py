@@ -1,9 +1,4 @@
-from scripts.helpful_scripts import get_account
-
-from scripts.helpful_scripts import get_account, get_contract
-
-# from scripts.helpful_scripts import get_account, get_contract, fund_with_link
-
+from scripts.helpful_scripts import get_account, get_contract, fund_with_link
 from brownie import Lottery, network, config
 import time
 
@@ -54,6 +49,7 @@ def end_lottery():
     tx.wait(1)
     ending_transaction = lottery.endLottery({"from": account})
     ending_transaction.wait(1)
+    ## como en endLoterry llamamos a fulfillRandomness, necesitamos darle un tiempo para que se ejecute
     time.sleep(180)
     print(f"{lottery.recentWinner()} is the new winner!")
 

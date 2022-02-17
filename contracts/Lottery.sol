@@ -27,12 +27,10 @@ contract Lottery is VRFConsumerBase, Ownable {
 
     uint256 public fee;
     bytes32 public keyhash;
-
+    //para guardar el id de request del numero aleatorio solicitado cuando en  se llama a requestRandomness
+    //en end lottery
     event RequestedRandomness(bytes32 requestId);
 
-    // usdEntryFee = 50 * (10**18);
-    // ethUsdPriceFeed = AggregatorV3Interface(_priceFeedAddress);
-    // lottery_state = LOTTERY_STATE.CLOSED;
     constructor(
         address _priceFeedAddress,
         address _vrfCoordinator,
@@ -85,8 +83,14 @@ contract Lottery is VRFConsumerBase, Ownable {
         //     )
         // ) % players.length;
         lottery_state = LOTTERY_STATE.CALCULATING_WINNER;
+
+        // la funcion que genera el numero aleatorio desde link es la funcion
+        // requestedRandomness que viene desde
+        //https://github.com/smartcontractkit/chainlink/blob/develop/contracts/src/v0.6/VRFConsumerBase.sol
+        //importado mediante > import "@chainlink/contracts/src/v0.6/VRFConsumerBase.sol";
+
         bytes32 requestId = requestRandomness(keyhash, fee);
-        //     emit RequestedRandomness(requestId);
+        emit RequestedRandomness(requestId);
     }
 
     function fulfillRandomness(bytes32 _requestId, uint256 _randomness)
